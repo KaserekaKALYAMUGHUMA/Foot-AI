@@ -10,16 +10,13 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #121212; color: #e0e0e0; padding-bottom: 75px; }
         
-        /* Header & Navigation top */
         .app-header { background-color: #1e1e1e; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #2c2c2c; position: sticky; top: 0; z-index: 1000; }
         .app-logo { font-size: 16px; font-weight: bold; color: #00E676; }
         .lang-select { background: #121212; color: #00E676; border: 1px solid #2c2c2c; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: bold; }
 
-        /* Search Bar */
         .search-container { padding: 10px 12px; background: #181818; border-bottom: 1px solid #2c2c2c; }
         .search-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #333; background-color: #121212; color: white; font-size: 13px; outline: none; }
 
-        /* Bottom Nav */
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 60px; background-color: #1e1e1e; border-top: 1px solid #2c2c2c; display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 9px; color: #888; cursor: pointer; text-align: center; }
         .nav-item.active { color: #00E676; font-weight: bold; }
@@ -28,18 +25,15 @@
         .screen { display: none; padding: 12px; }
         .screen.active { display: block; }
 
-        /* Cards & Components */
         .card { background-color: #1e1e1e; border-radius: 10px; padding: 12px; margin-bottom: 12px; border: 1px solid #2c2c2c; }
         .badge-won { background-color: rgba(0, 230, 118, 0.2); color: #00E676; padding: 3px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; }
         .match-item { background-color: #121212; border-radius: 8px; padding: 10px; margin-bottom: 8px; border: 1px solid #222; cursor: pointer; }
         .league-title { font-size: 11px; color: #00E676; text-transform: uppercase; font-weight: bold; margin-bottom: 4px; }
         .teams { font-size: 14px; font-weight: bold; color: #fff; }
         
-        /* Modal Detail Match */
         #matchModal, #loginModal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(18, 18, 18, 0.98); z-index: 2000; padding: 15px; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
         
-        /* Blur Overlay */
         .locked-overlay { position: relative; }
         .blur-content { filter: blur(6px); pointer-events: none; }
         .lock-banner { position: absolute; top: 15%; left: 5%; right: 5%; background: #1e1e1e; border: 1px solid #00E676; border-radius: 12px; padding: 20px; text-align: center; z-index: 100; box-shadow: 0 10px 25px rgba(0,0,0,0.8); }
@@ -51,84 +45,82 @@
 <body>
 
     <div class="app-header">
-        <div class="app-logo">⚽ FootAI Live</div>
+        <div class="app-logo">FootAI Live</div>
         <select class="lang-select" id="langSelect" onchange="changerLangue()">
-            <option value="fr">FR 🇫🇷</option>
-            <option value="en">EN 🇬🇧</option>
+            <option value="fr">FR</option>
+            <option value="en">EN</option>
         </select>
     </div>
 
-    <!-- Barre de Recherche -->
     <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Rechercher un match, une équipe ou un championnat..." onkeyup="filtrerRecherche()">
+        <input type="text" id="searchInput" class="search-input" placeholder="Rechercher un match, une equipe ou un championnat..." onkeyup="filtrerRecherche()">
     </div>
 
     <!-- 1. PAGE D'ACCUEIL (Billets Gagnés Précédemment) -->
     <div id="screen-home" class="screen active">
-        <h1 style="font-size: 15px; color:#fff; margin-bottom:10px;" data-tr="home_title">🏆 Derniers Tickets Gagnés</h1>
+        <h1 style="font-size: 15px; color:#fff; margin-bottom:10px;" data-tr="home_title">Derniers Tickets Gagnes</h1>
         <div class="card" style="border-left: 4px solid #00E676;">
             <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-                <span style="font-weight:bold; font-size:13px;">Ticket Combiné Hier</span>
-                <span class="badge-won">GAGNÉ ✅</span>
+                <span style="font-weight:bold; font-size:13px;">Ticket Combine Hier</span>
+                <span class="badge-won">GAGNE</span>
             </div>
             <p style="font-size:11px; color:#aaa;">Cote Totale : <strong>2.85</strong></p>
-            <p style="font-size:11px; color:#aaa; margin-top:4px;">• Real Madrid vs Getafe : Victoire Madrid (1.30)<br>• Man City vs Everton : Plus 1.5 Buts (1.22)<br>• PSG vs Monaco : Les 2 équipes marquent (1.50)</p>
+            <p style="font-size:11px; color:#aaa; margin-top:4px;">* Real Madrid vs Getafe : Victoire Madrid (1.30)<br>* Man City vs Everton : Plus 1.5 Buts (1.22)<br>* PSG vs Monaco : Les 2 equipes marquent (1.50)</p>
         </div>
         <div class="card" style="border-left: 4px solid #00E676;">
             <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-                <span style="font-weight:bold; font-size:13px;">Ticket Sécurisé (Avant-hier)</span>
-                <span class="badge-won">GAGNÉ ✅</span>
+                <span style="font-weight:bold; font-size:13px;">Ticket Securise (Avant-hier)</span>
+                <span class="badge-won">GAGNE</span>
             </div>
             <p style="font-size:11px; color:#aaa;">Cote Totale : <strong>2.10</strong></p>
-            <p style="font-size:11px; color:#aaa; margin-top:4px;">• Arsenal vs Wolves : Arsenal Gagne (1.35)<br>• Inter Milan vs Empoli : Inter ou Nul (1.18)</p>
+            <p style="font-size:11px; color:#aaa; margin-top:4px;">* Arsenal vs Wolves : Arsenal Gagne (1.35)<br>* Inter Milan vs Empoli : Inter ou Nul (1.18)</p>
         </div>
     </div>
 
     <!-- 2. PAGE CHAMPIONNATS & MATCHS DU JOUR -->
     <div id="screen-matches" class="screen">
-        <h1 style="font-size: 15px; color:#fff; margin-bottom:10px;" data-tr="matches_title">⚽ Championnats & Matchs du Jour</h1>
+        <h1 style="font-size: 15px; color:#fff; margin-bottom:10px;" data-tr="matches_title">Championnats & Matchs du Jour</h1>
         <div id="matchesList">
-            <div class="match-item" onclick="ouvrirMatch('Man City vs Everton', 'Premier League', 'Victoire Man City', '88%', 'V-V-N-V-V', 'V-D-N-D-D', '1er vs 14ème')">
-                <div class="league-title">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</div>
+            <div class="match-item" onclick="ouvrirMatch('Man City vs Everton', 'Premier League', 'Victoire Man City', '88%', 'V-V-N-V-V', 'V-D-N-D-D', '1er vs 14eme')">
+                <div class="league-title">Premier League</div>
                 <div class="teams">Man City vs Everton</div>
-                <p style="font-size:11px; color:#888; margin-top:4px;">Pronostic : <strong style="color:#00E676;">Victoire Man City (1.30)</strong> • Cliquez pour l'analyse</p>
+                <p style="font-size:11px; color:#888; margin-top:4px;">Pronostic : <strong style="color:#00E676;">Victoire Man City (1.30)</strong> - Cliquez pour l'analyse</p>
             </div>
-            <div class="match-item" onclick="ouvrirMatch('Real Madrid vs Getafe', 'La Liga', 'Plus de 1.5 Buts', '92%', 'V-V-V-N-V', 'D-N-D-V-D', '2ème vs 11ème')">
-                <div class="league-title">🇪🇸 La Liga</div>
+            <div class="match-item" onclick="ouvrirMatch('Real Madrid vs Getafe', 'La Liga', 'Plus de 1.5 Buts', '92%', 'V-V-V-N-V', 'D-N-D-V-D', '2eme vs 11eme')">
+                <div class="league-title">La Liga</div>
                 <div class="teams">Real Madrid vs Getafe</div>
-                <p style="font-size:11px; color:#888; margin-top:4px;">Pronostic : <strong style="color:#00E676;">Plus de 1.5 Buts (1.25)</strong> • Cliquez pour l'analyse</p>
+                <p style="font-size:11px; color:#888; margin-top:4px;">Pronostic : <strong style="color:#00E676;">Plus de 1.5 Buts (1.25)</strong> - Cliquez pour l'analyse</p>
             </div>
-            <div class="match-item" onclick="ouvrirMatch('PSG vs Monaco', 'Ligue 1', 'Les 2 marquent', '81%', 'V-N-V-V-D', 'V-V-D-N-V', '1er vs 3ème')">
-                <div class="league-title">🇫🇷 Ligue 1</div>
+            <div class="match-item" onclick="ouvrirMatch('PSG vs Monaco', 'Ligue 1', 'Les 2 marquent', '81%', 'V-N-V-V-D', 'V-V-D-N-V', '1er vs 3eme')">
+                <div class="league-title">Ligue 1</div>
                 <div class="teams">PSG vs Monaco</div>
-                <p style="font-size:11px; color:#888; margin-top:4px;">Pronostic : <strong style="color:#00E676;">Les 2 équipes marquent (1.50)</strong> • Cliquez pour l'analyse</p>
+                <p style="font-size:11px; color:#888; margin-top:4px;">Pronostic : <strong style="color:#00E676;">Les 2 equipes marquent (1.50)</strong> - Cliquez pour l'analyse</p>
             </div>
         </div>
     </div>
 
-    <!-- 3. PAGE 5 TICKETS SÉCURISÉS (PONT DE VERROUILLAGE) -->
+    <!-- 3. PAGE 5 TICKETS SECURISES -->
     <div id="screen-tickets" class="screen">
-        <h1 style="font-size: 15px; color:#fff; margin-bottom:10px;" data-tr="tickets_title">🎫 5 Tickets Sécurisés du Jour</h1>
+        <h1 style="font-size: 15px; color:#fff; margin-bottom:10px;" data-tr="tickets_title">5 Tickets Securises du Jour</h1>
         <div id="lockWrapper" class="locked-overlay">
             <div id="lockBanner" class="lock-banner">
-                <div style="font-size: 30px; margin-bottom: 8px;">🔒</div>
                 <h3 style="color: #fff; font-size: 14px; margin-bottom: 6px;">Compte Obligatoire</h3>
-                <p style="font-size: 11px; color: #aaa; margin-bottom: 12px;">Créez un compte gratuit pour débloquer les 5 tickets IA du jour.</p>
-                <button onclick="ouvrirLogin()">Créer un compte</button>
+                <p style="font-size: 11px; color: #aaa; margin-bottom: 12px;">Creez un compte gratuit pour debloquer les 5 tickets IA du jour.</p>
+                <button onclick="ouvrirLogin()">Creez un compte</button>
             </div>
             <div id="blurTickets" class="blur-content">
-                <div class="card"><h3 style="color:#fff;">Ticket 1 (Cote 2.10)</h3><p style="font-size:11px; color:#888;">Contenu masqué...</p></div>
-                <div class="card"><h3 style="color:#fff;">Ticket 2 (Cote 2.45)</h3><p style="font-size:11px; color:#888;">Contenu masqué...</p></div>
-                <div class="card"><h3 style="color:#fff;">Ticket 3 (Cote 2.05)</h3><p style="font-size:11px; color:#888;">Contenu masqué...</p></div>
-                <div class="card"><h3 style="color:#fff;">Ticket 4 (Cote 2.80)</h3><p style="font-size:11px; color:#888;">Contenu masqué...</p></div>
-                <div class="card"><h3 style="color:#fff;">Ticket 5 (Cote 2.30)</h3><p style="font-size:11px; color:#888;">Contenu masqué...</p></div>
+                <div class="card"><h3 style="color:#fff;">Ticket 1 (Cote 2.10)</h3><p style="font-size:11px; color:#888;">Contenu masque...</p></div>
+                <div class="card"><h3 style="color:#fff;">Ticket 2 (Cote 2.45)</h3><p style="font-size:11px; color:#888;">Contenu masque...</p></div>
+                <div class="card"><h3 style="color:#fff;">Ticket 3 (Cote 2.05)</h3><p style="font-size:11px; color:#888;">Contenu masque...</p></div>
+                <div class="card"><h3 style="color:#fff;">Ticket 4 (Cote 2.80)</h3><p style="font-size:11px; color:#888;">Contenu masque...</p></div>
+                <div class="card"><h3 style="color:#fff;">Ticket 5 (Cote 2.30)</h3><p style="font-size:11px; color:#888;">Contenu masque...</p></div>
             </div>
         </div>
     </div>
 
-    <!-- 4. PAGE ÉQUIPES FAVORITES -->
+    <!-- 4. PAGE EQUIPES FAVORITES -->
     <div id="screen-favs" class="screen">
-        <h1 style="font-size: 15px; color:#fff; margin-bottom:10px;" data-tr="favs_title">⭐ Mes Équipes Favorites</h1>
+        <h1 style="font-size: 15px; color:#fff; margin-bottom:10px;" data-tr="favs_title">Mes Equipes Favorites</h1>
         <div class="card">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-weight:bold; color:#fff;">Real Madrid</span>
@@ -145,57 +137,57 @@
 
     <!-- 5. PAGE COMPTE UTILISATEUR -->
     <div id="screen-profile" class="screen">
-        <h1 style="font-size: 15px; color:#fff; margin-bottom:10px;" data-tr="profile_title">👤 Mon Compte</h1>
+        <h1 style="font-size: 15px; color:#fff; margin-bottom:10px;" data-tr="profile_title">Mon Compte</h1>
         <div class="card">
-            <span id="userStatus" style="font-size: 13px;">Vous n'êtes pas connecté</span>
+            <span id="userStatus" style="font-size: 13px;">Vous n'etes pas connecte</span>
             <button id="authBtn" onclick="ouvrirLogin()">Se Connecter / S'inscrire</button>
         </div>
     </div>
 
-    <!-- MODAL DÉTAILS DU MATCH (Analyse complète) -->
+    <!-- MODAL DETAILS DU MATCH -->
     <div id="matchModal">
         <div class="modal-header">
-            <h2 id="modalTitle" style="font-size:15px; color:#fff;">Détails du Match</h2>
-            <span onclick="fermerMatch()" style="cursor:pointer; color:#888; font-weight:bold;">✕</span>
+            <h2 id="modalTitle" style="font-size:15px; color:#fff;">Details du Match</h2>
+            <span onclick="fermerMatch()" style="cursor:pointer; color:#888; font-weight:bold;">X</span>
         </div>
         <div id="modalContent"></div>
     </div>
 
     <!-- MODAL CONNEXION -->
     <div id="loginModal">
-        <h1 style="font-size: 18px; text-align: center; margin-bottom: 10px;">Créer un Compte</h1>
-        <p style="font-size: 12px; color: #888; text-align: center; margin-bottom: 15px;">Accédez aux 5 tickets sécurisés gratuitement.</p>
-        <button style="background-color: #fff; color: #000; margin-bottom: 10px;" onclick="connecter('Google User')">🌐 Avec Google</button>
-        <input type="text" id="userInput" placeholder="Email ou Numéro">
+        <h1 style="font-size: 18px; text-align: center; margin-bottom: 10px;">Creez un Compte</h1>
+        <p style="font-size: 12px; color: #888; text-align: center; margin-bottom: 15px;">Accedez aux 5 tickets securises gratuitement.</p>
+        <button style="background-color: #fff; color: #000; margin-bottom: 10px;" onclick="connecter('Google User')">Avec Google</button>
+        <input type="text" id="userInput" placeholder="Email ou Numero">
         <button onclick="connecter(document.getElementById('userInput').value)">Valider</button>
         <button onclick="fermerLogin()" style="background:transparent; color:#888; border:1px solid #333; margin-top:8px;">Fermer</button>
     </div>
 
-    <!-- BARRE DE NAVIGATION INFÉRIEURE -->
+    <!-- BARRE DE NAVIGATION INFERIEURE -->
     <div class="bottom-nav">
-        <div class="nav-item active" onclick="naviguerVers('screen-home', this)"><span class="nav-icon">🏆</span><span data-tr="nav_home">Accueil</span></div>
-        <div class="nav-item" onclick="naviguerVers('screen-matches', this)"><span class="nav-icon">⚽</span><span data-tr="nav_matches">Matchs</span></div>
-        <div class="nav-item" onclick="naviguerVers('screen-tickets', this)"><span class="nav-icon">🎫</span><span data-tr="nav_tickets">5 Tickets</span></div>
-        <div class="nav-item" onclick="naviguerVers('screen-favs', this)"><span class="nav-icon">⭐</span><span data-tr="nav_favs">Favoris</span></div>
-        <div class="nav-item" onclick="naviguerVers('screen-profile', this)"><span class="nav-icon">👤</span><span data-tr="nav_profile">Profil</span></div>
+        <div class="nav-item active" onclick="naviguerVers('screen-home', this)"><span class="nav-icon">[H]</span><span data-tr="nav_home">Accueil</span></div>
+        <div class="nav-item" onclick="naviguerVers('screen-matches', this)"><span class="nav-icon">[M]</span><span data-tr="nav_matches">Matchs</span></div>
+        <div class="nav-item" onclick="naviguerVers('screen-tickets', this)"><span class="nav-icon">[T]</span><span data-tr="nav_tickets">5 Tickets</span></div>
+        <div class="nav-item" onclick="naviguerVers('screen-favs', this)"><span class="nav-icon">[F]</span><span data-tr="nav_favs">Favoris</span></div>
+        <div class="nav-item" onclick="naviguerVers('screen-profile', this)"><span class="nav-icon">[P]</span><span data-tr="nav_profile">Profil</span></div>
     </div>
 
     <script>
         const trads = {
             fr: {
-                home_title: "🏆 Derniers Tickets Gagnés",
-                matches_title: "⚽ Championnats & Matchs du Jour",
-                tickets_title: "🎫 5 Tickets Sécurisés du Jour",
-                favs_title: "⭐ Mes Équipes Favorites",
-                profile_title: "👤 Mon Compte",
+                home_title: "Derniers Tickets Gagnes",
+                matches_title: "Championnats & Matchs du Jour",
+                tickets_title: "5 Tickets Securises du Jour",
+                favs_title: "Mes Equipes Favorites",
+                profile_title: "Mon Compte",
                 nav_home: "Accueil", nav_matches: "Matchs", nav_tickets: "5 Tickets", nav_favs: "Favoris", nav_profile: "Profil"
             },
             en: {
-                home_title: "🏆 Last Winning Tickets",
-                matches_title: "⚽ Leagues & Today's Matches",
-                tickets_title: "🎫 5 Daily Safe Tickets",
-                favs_title: "⭐ Favorite Teams",
-                profile_title: "👤 User Account",
+                home_title: "Last Winning Tickets",
+                matches_title: "Leagues & Today's Matches",
+                tickets_title: "5 Daily Safe Tickets",
+                favs_title: "Favorite Teams",
+                profile_title: "User Account",
                 nav_home: "Home", nav_matches: "Matches", nav_tickets: "5 Tickets", nav_favs: "Favorites", nav_profile: "Profile"
             }
         };
@@ -230,15 +222,15 @@
                 <div class="card">
                     <p style="font-size:11px; color:#888;">${league}</p>
                     <p style="font-size:13px; margin-top:5px;">Pronostic IA : <strong style="color:#00E676;">${pronostic}</strong></p>
-                    <p style="font-size:12px; color:#aaa; margin-top:3px;">Probabilité de réussite : <strong>${proba}</strong></p>
+                    <p style="font-size:12px; color:#aaa; margin-top:3px;">Probabilite de reussite : <strong>${proba}</strong></p>
                 </div>
                 <div class="card">
-                    <h4 style="font-size:12px; color:#fff; margin-bottom:6px;">📊 Forme sur les 5 derniers matchs</h4>
-                    <p style="font-size:11px; color:#ccc;">Équipe Domicile : <strong>${formE1}</strong></p>
-                    <p style="font-size:11px; color:#ccc; margin-top:4px;">Équipe Extérieur : <strong>${formE2}</strong></p>
+                    <h4 style="font-size:12px; color:#fff; margin-bottom:6px;">Forme sur les 5 derniers matchs</h4>
+                    <p style="font-size:11px; color:#ccc;">Equipe Domicile : <strong>${formE1}</strong></p>
+                    <p style="font-size:11px; color:#ccc; margin-top:4px;">Equipe Exterieur : <strong>${formE2}</strong></p>
                 </div>
                 <div class="card">
-                    <h4 style="font-size:12px; color:#fff; margin-bottom:4px;">🏆 Classement au Championnat</h4>
+                    <h4 style="font-size:12px; color:#fff; margin-bottom:4px;">Classement au Championnat</h4>
                     <p style="font-size:11px; color:#aaa;">Positions : ${pos}</p>
                 </div>
             `;
@@ -269,15 +261,15 @@
             const blurTickets = document.getElementById('blurTickets');
 
             if (user) {
-                userStatus.innerHTML = `Connecté en tant que : <strong style="color:#00E676;">${user}</strong>`;
-                authBtn.innerText = "Se Déconnecter";
+                userStatus.innerHTML = `Connecte en tant que : <strong style="color:#00E676;">${user}</strong>`;
+                authBtn.innerText = "Se Deconnecter";
                 authBtn.style.backgroundColor = "#ff5252";
                 authBtn.onclick = deconnecter;
 
                 lockBanner.style.display = "none";
                 blurTickets.classList.remove("blur-content");
             } else {
-                userStatus.innerText = "Vous n'êtes pas connecté";
+                userStatus.innerText = "Vous n'etes pas connecte";
                 authBtn.innerText = "Se Connecter / S'inscrire";
                 authBtn.style.backgroundColor = "#00E676";
                 authBtn.onclick = ouvrirLogin;
