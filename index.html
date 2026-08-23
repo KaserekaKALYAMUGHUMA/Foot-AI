@@ -104,7 +104,7 @@
     .ticket-title {
       font-weight: bold;
       color: var(--accent-gold);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     .ticket-odd {
@@ -120,7 +120,7 @@
       display: flex;
       justify-content: space-between;
       font-size: 0.82rem;
-      padding: 4px 0;
+      padding: 6px 0;
       border-bottom: 1px dashed #2a2a2a;
     }
 
@@ -382,27 +382,88 @@
   <h1>⚡ FootAI - Livescore & Pronos</h1>
 
   <div class="search-box">
-    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Rechercher une équipe (ex: Liverpool, Barça...)" oninput="filterMatches()" />
+    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Rechercher (ex: Liverpool, Barça, NBA...)" oninput="filterMatches()" />
   </div>
 
   <div class="view-tabs">
     <div class="tab-btn active" id="tabMatches" onclick="switchMainView('matches')">⚽ Tous les Matchs</div>
-    <div class="tab-btn" id="tabTickets" onclick="switchMainView('tickets')">🎯 Billets Sécurisés du Jour</div>
+    <div class="tab-btn" id="tabTickets" onclick="switchMainView('tickets')">🎯 5 Billets du Jour</div>
   </div>
 
+  <!-- SECTION DES 5 BILLETS DU JOUR -->
   <div id="ticketsView" class="tickets-container" style="display: none;">
     <div class="ticket-card">
       <div class="ticket-header">
-        <span class="ticket-title">🛡️ Billet Sécurisé #1 (Très Fort)</span>
-        <span class="ticket-odd">Cote 1.52</span>
+        <span class="ticket-title">🛡️ Billet #1 - Ultra Sécurisé (Confiance 95%)</span>
+        <span class="ticket-odd">Cote 1.55</span>
       </div>
       <div class="ticket-item">
         <span>Liverpool vs Opposition</span>
-        <strong style="color: var(--accent);">Victoire Liverpool ou Nul</strong>
+        <strong style="color: var(--accent);">Liverpool ou Nul (1X)</strong>
       </div>
       <div class="ticket-item">
         <span>FC Barcelone vs Opposition</span>
         <strong style="color: var(--accent);">Plus de 1.5 Buts</strong>
+      </div>
+    </div>
+
+    <div class="ticket-card">
+      <div class="ticket-header">
+        <span class="ticket-title">🔥 Billet #2 - Total Buts (Over/Under)</span>
+        <span class="ticket-odd">Cote 1.85</span>
+      </div>
+      <div class="ticket-item">
+        <span>Real Madrid vs Opposition</span>
+        <strong style="color: var(--accent);">Plus de 2.5 Buts</strong>
+      </div>
+      <div class="ticket-item">
+        <span>Bayern Munich vs Opposition</span>
+        <strong style="color: var(--accent);">Les 2 Équipes Marquent</strong>
+      </div>
+    </div>
+
+    <div class="ticket-card">
+      <div class="ticket-header">
+        <span class="ticket-title">⚡ Billet #3 - Double Chance & Sécurité</span>
+        <span class="ticket-odd">Cote 1.68</span>
+      </div>
+      <div class="ticket-item">
+        <span>PSG vs Opposition</span>
+        <strong style="color: var(--accent);">Victoire PSG</strong>
+      </div>
+      <div class="ticket-item">
+        <span>Arsenal vs Opposition</span>
+        <strong style="color: var(--accent);">Arsenal ou Nul (1X)</strong>
+      </div>
+    </div>
+
+    <div class="ticket-card">
+      <div class="ticket-header">
+        <span class="ticket-title">🏀 Billet #4 - Spécial Basket NBA</span>
+        <span class="ticket-odd">Cote 1.92</span>
+      </div>
+      <div class="ticket-item">
+        <span>LA Lakers vs Opposant</span>
+        <strong style="color: var(--accent);">Plus de 215.5 Points</strong>
+      </div>
+      <div class="ticket-item">
+        <span>Boston Celtics vs Opposant</span>
+        <strong style="color: var(--accent);">Victoire Celtics</strong>
+      </div>
+    </div>
+
+    <div class="ticket-card">
+      <div class="ticket-header">
+        <span class="ticket-title">🚀 Billet #5 - Super Combo Cote 2.50+</span>
+        <span class="ticket-odd">Cote 2.65</span>
+      </div>
+      <div class="ticket-item">
+        <span>Manchester City vs Opposition</span>
+        <strong style="color: var(--accent);">Man City Gagne & +1.5 Buts</strong>
+      </div>
+      <div class="ticket-item">
+        <span>Inter Milan vs Opposition</span>
+        <strong style="color: var(--accent);">Inter Milan gagne au moins une mi-temps</strong>
       </div>
     </div>
   </div>
@@ -440,6 +501,12 @@
     let currentFilter = getFormattedDate(0);
     let rawMatchesData = [];
 
+    // GRANDS CHAMPIONNATS PRIORITAIRES (Série A, Premier League, Liga, NBA, etc.)
+    const TOP_LEAGUES_KEYWORDS = [
+      'premier league', 'la liga', 'laliga', 'serie a', 'bundesliga', 
+      'ligue 1', 'champions league', 'europa league', 'nba', 'nhl'
+    ];
+
     const SPORT_CONFIGS = {
       football: {
         baseUrl: "https://v3.football.api-sports.io/fixtures",
@@ -452,11 +519,13 @@
           awayLogo: item.teams.away.logo,
           awayId: item.teams.away.id,
           league: `${item.league.country || ''} - ${item.league.name}`,
+          leagueNameOnly: item.league.name,
           scoreHome: item.goals.home ?? '-',
           scoreAway: item.goals.away ?? '-',
           status: item.fixture.status.short,
           time: item.fixture.date ? new Date(item.fixture.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '',
-          elapsed: item.fixture.status.elapsed
+          elapsed: item.fixture.status.elapsed,
+          rawDate: item.fixture.date
         })
       }
     };
@@ -539,41 +608,39 @@
 
       const config = SPORT_CONFIGS.football;
 
-      // Grands championnats à prioriser
-      const TOP_LEAGUES = [
-        'UEFA Champions League', 'Premier League', 'La Liga', 
-        'Serie A', 'Ligue 1', 'Bundesliga', 'UEFA Europa League'
-      ];
-
-      function getLeaguePriority(leagueName) {
-        return TOP_LEAGUES.some(top => leagueName.includes(top)) ? 0 : 1;
+      // 1. Détecter si un championnat est GRAND/MAGEUR (Premier League, La Liga, Barça, Liverpool...)
+      function isTopLeague(leagueName) {
+        const nameLower = leagueName.toLowerCase();
+        return TOP_LEAGUES_KEYWORDS.some(kw => nameLower.includes(kw));
       }
 
+      // 2. Définir la priorité selon le statut (0 = À venir, 1 = Direct, 2 = Terminé)
       function getStatusPriority(status) {
-        if (['1H', '2H', 'HT', 'LIVE', 'Q1', 'Q2', 'Q3', 'Q4', 'OT'].includes(status)) return 0; // En direct
-        if (['NS', 'TBD', 'PST', 'CANC'].includes(status)) return 1; // À venir
-        return 2; // Terminés
+        if (['NS', 'TBD'].includes(status)) return 0; // À venir d'abord pour l'onglet Aujourd'hui
+        if (['1H', '2H', 'HT', 'LIVE', 'Q1', 'Q2', 'Q3', 'Q4', 'OT'].includes(status)) return 1; // En direct
+        return 2; // Matchs terminés
       }
 
-      // Tri : Direct / À venir d'abord -> Grands championnats -> Heure du match
+      // Tri strict : Grands championnats d'abord, puis status, puis heure
       const sortedMatches = [...matches].sort((a, b) => {
         const matchA = config.getName(a);
         const matchB = config.getName(b);
 
+        const topA = isTopLeague(matchA.league) ? 0 : 1;
+        const topB = isTopLeague(matchB.league) ? 0 : 1;
+
+        if (topA !== topB) return topA - topB; // Priorité absolue aux Grands Championnats
+
         const statusA = getStatusPriority(matchA.status);
         const statusB = getStatusPriority(matchB.status);
 
-        if (statusA !== statusB) return statusA - statusB;
+        if (statusA !== statusB) return statusA - statusB; // À venir -> Direct -> Terminé
 
-        const leagueA = getLeaguePriority(matchA.league);
-        const leagueB = getLeaguePriority(matchB.league);
-
-        if (leagueA !== leagueB) return leagueA - leagueB;
-
-        return new Date(a.fixture.date) - new Date(b.fixture.date);
+        return new Date(matchA.rawDate) - new Date(matchB.rawDate);
       });
 
-      sortedMatches.slice(0, 60).forEach(rawItem => {
+      // Augmentation du nombre de matchs affichés à 200
+      sortedMatches.slice(0, 200).forEach(rawItem => {
         const match = config.getName(rawItem);
         const isLive = ['1H', '2H', 'HT'].includes(match.status);
         const isScheduled = ['NS', 'TBD'].includes(match.status);
@@ -598,7 +665,7 @@
             <span class="score">${match.scoreAway}</span>
           </div>
           <div class="match-footer">
-            <span class="prono-badge">📊 Voir les 7 Pronostics & T-à-T</span>
+            <span class="prono-badge">📊 Voir 7 Pronos & T-à-T</span>
             <span class="status ${isLive ? 'live' : (isScheduled ? 'scheduled' : '')}">
               ${isLive ? '🔴 ' + (match.elapsed ? match.elapsed + "'" : match.status) : (isScheduled ? '🕒 ' + match.time : match.status)}
             </span>
@@ -646,15 +713,15 @@
           </div>
         </div>
 
-        <div class="prono-list-title">🤖 7 Pronostics de l'IA</div>
+        <div class="prono-list-title">🤖 7 Pronostics IA</div>
         <div class="prono-grid">
           <div class="prono-item">1. Issue (1X2) <strong>Victoire ${match.home} ou Nul</strong></div>
           <div class="prono-item">2. Total Buts <strong>Plus de 1.5 Buts</strong></div>
           <div class="prono-item">3. Les 2 marquent <strong>Oui (68%)</strong></div>
-          <div class="prono-item">4. Score Exact Probable <strong>2 - 1</strong></div>
-          <div class="prono-item">5. Mi-temps <strong>Plus de 0.5 But en MT1</strong></div>
+          <div class="prono-item">4. Score Probable <strong>2 - 1</strong></div>
+          <div class="prono-item">5. Mi-temps <strong>Plus de 0.5 But MT1</strong></div>
           <div class="prono-item">6. Chance Double <strong>1X (Sécurité 92%)</strong></div>
-          <div class="prono-item">7. Nombre de Corners <strong>Plus de 8.5 Corners</strong></div>
+          <div class="prono-item">7. Corners <strong>Plus de 8.5 Corners</strong></div>
         </div>
 
         <div class="prono-list-title">⚔️ Historique Tête-à-Tête (T à T)</div>
