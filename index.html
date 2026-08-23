@@ -539,7 +539,41 @@
 
       const config = SPORT_CONFIGS.football;
 
-      matches.slice(0, 50).forEach(rawItem => {
+      // Grands championnats à prioriser
+      const TOP_LEAGUES = [
+        'UEFA Champions League', 'Premier League', 'La Liga', 
+        'Serie A', 'Ligue 1', 'Bundesliga', 'UEFA Europa League'
+      ];
+
+      function getLeaguePriority(leagueName) {
+        return TOP_LEAGUES.some(top => leagueName.includes(top)) ? 0 : 1;
+      }
+
+      function getStatusPriority(status) {
+        if (['1H', '2H', 'HT', 'LIVE', 'Q1', 'Q2', 'Q3', 'Q4', 'OT'].includes(status)) return 0; // En direct
+        if (['NS', 'TBD', 'PST', 'CANC'].includes(status)) return 1; // À venir
+        return 2; // Terminés
+      }
+
+      // Tri : Direct / À venir d'abord -> Grands championnats -> Heure du match
+      const sortedMatches = [...matches].sort((a, b) => {
+        const matchA = config.getName(a);
+        const matchB = config.getName(b);
+
+        const statusA = getStatusPriority(matchA.status);
+        const statusB = getStatusPriority(matchB.status);
+
+        if (statusA !== statusB) return statusA - statusB;
+
+        const leagueA = getLeaguePriority(matchA.league);
+        const leagueB = getLeaguePriority(matchB.league);
+
+        if (leagueA !== leagueB) return leagueA - leagueB;
+
+        return new Date(a.fixture.date) - new Date(b.fixture.date);
+      });
+
+      sortedMatches.slice(0, 60).forEach(rawItem => {
         const match = config.getName(rawItem);
         const isLive = ['1H', '2H', 'HT'].includes(match.status);
         const isScheduled = ['NS', 'TBD'].includes(match.status);
@@ -583,7 +617,6 @@
       modal.style.display = "flex";
       content.innerHTML = `<div style="text-align:center; padding: 20px;">Chargement des 7 Pronostics et T-à-T...</div>`;
 
-      // Requête Tête-à-Tête (H2H)
       let h2hText = "Historique T-à-T indisponible";
       try {
         const h2hRes = await fetch(`https://v3.football.api-sports.io/fixtures/headtohead?h2h=${match.homeId}-${match.awayId}`, {
@@ -596,7 +629,6 @@
         }
       } catch(e) { console.error(e); }
 
-      // Affichage complet des 7 Pronostics + Tête-à-Tête + Forme
       content.innerHTML = `
         <div style="font-size:0.75rem; color:var(--accent); font-weight:bold;">${match.league}</div>
         
