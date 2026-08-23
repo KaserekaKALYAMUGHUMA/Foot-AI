@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FootAI Live & Pronos</title>
+  <title>FootAI - Pronostics & Tickets Sécurisés</title>
   <style>
     :root {
       --bg-color: #121212;
       --card-bg: #1e1e1e;
       --accent: #00e676;
+      --accent-gold: #ffb300;
       --text: #ffffff;
       --text-muted: #aaaaaa;
       --border: #2a2a2a;
@@ -19,33 +20,131 @@
       background-color: var(--bg-color);
       color: var(--text);
       margin: 0;
-      padding: 15px;
+      padding: 12px;
       max-width: 800px;
       margin: 0 auto;
     }
 
     h1 {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       text-align: center;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       color: var(--accent);
     }
 
-    .sports-bar {
+    /* BARRE DE RECHERCHE */
+    .search-box {
+      margin-bottom: 12px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: #fff;
+      font-size: 0.9rem;
+      box-sizing: border-box;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+    }
+
+    /* NAVIGATION PAR ONGLETS (MATCHS vs TICKETS) */
+    .view-tabs {
       display: flex;
       justify-content: center;
       gap: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 8px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    .tab-btn.active {
+      background: var(--border);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* SECTION BILLETS SÉCURISÉS */
+    .tickets-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .ticket-card {
+      background: linear-gradient(135deg, #1e1e1e 0%, #252525 100%);
+      border: 1px solid var(--accent-gold);
+      border-radius: 12px;
+      padding: 12px;
+      position: relative;
+    }
+
+    .ticket-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+    }
+
+    .ticket-title {
+      font-weight: bold;
+      color: var(--accent-gold);
+      font-size: 0.95rem;
+    }
+
+    .ticket-odd {
+      background: var(--accent-gold);
+      color: #000;
+      font-weight: bold;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+
+    .ticket-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      padding: 4px 0;
+      border-bottom: 1px dashed #2a2a2a;
+    }
+
+    /* BARRES DE SPORTS & DATES */
+    .sports-bar {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 12px;
     }
 
     .sport-btn {
       background: var(--card-bg);
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 8px 18px;
+      padding: 6px 14px;
       border-radius: 20px;
       cursor: pointer;
       font-weight: bold;
+      font-size: 0.85rem;
     }
 
     .sport-btn.active {
@@ -59,9 +158,9 @@
       align-items: center;
       justify-content: space-between;
       background: var(--card-bg);
-      padding: 8px;
-      border-radius: 12px;
-      margin-bottom: 20px;
+      padding: 6px;
+      border-radius: 10px;
+      margin-bottom: 15px;
       border: 1px solid var(--border);
     }
 
@@ -69,10 +168,10 @@
       background: transparent;
       border: none;
       color: var(--text-muted);
-      padding: 6px 12px;
-      font-size: 0.85rem;
+      padding: 6px 10px;
+      font-size: 0.8rem;
       cursor: pointer;
-      border-radius: 8px;
+      border-radius: 6px;
     }
 
     .date-btn.active {
@@ -85,27 +184,29 @@
       background: var(--bg-color);
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 6px;
-      border-radius: 8px;
+      padding: 4px;
+      border-radius: 6px;
+      font-size: 0.8rem;
     }
 
+    /* CARTES MATCHS */
     .matches-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .match-card {
       background: var(--card-bg);
-      border-radius: 10px;
-      padding: 12px;
+      border-radius: 8px;
+      padding: 10px;
       border: 1px solid var(--border);
     }
 
     .league-title {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: var(--accent);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       border-bottom: 1px solid var(--border);
       padding-bottom: 4px;
       font-weight: bold;
@@ -122,23 +223,42 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      font-weight: bold;
     }
 
     .team-logo {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       object-fit: contain;
     }
 
     .score {
       font-weight: bold;
       color: var(--accent);
-      font-size: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .match-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .prono-badge {
+      font-size: 0.75rem;
+      color: var(--accent);
+      background: rgba(0, 230, 118, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--accent);
     }
 
     .status {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       padding: 2px 6px;
       border-radius: 4px;
       background: #333;
@@ -150,38 +270,116 @@
       font-weight: bold;
     }
 
+    .status.scheduled {
+      background: #1565c0;
+      color: #fff;
+    }
+
     #loading {
       text-align: center;
       color: var(--text-muted);
       margin-top: 20px;
+      font-size: 0.85rem;
     }
   </style>
 </head>
 <body>
 
-  <h1>⚡ FootAI Live & Pronos</h1>
+  <h1>⚡ FootAI - Livescore & Pronos</h1>
 
-  <div class="sports-bar">
-    <button class="sport-btn active" onclick="switchSport('football', this)">⚽ Football</button>
-    <button class="sport-btn" onclick="switchSport('basketball', this)">🏀 Basket</button>
-    <button class="sport-btn" onclick="switchSport('hockey', this)">🏒 Hockey</button>
+  <!-- BARRE DE RECHERCHE -->
+  <div class="search-box">
+    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Rechercher une équipe (ex: Liverpool, Barça...)" oninput="filterMatches()" />
   </div>
 
-  <div class="date-bar">
-    <button class="date-btn" onclick="setDateFilter('yesterday', this)">Hier</button>
-    <button class="date-btn active" onclick="setDateFilter('live', this)">🔴 Direct</button>
-    <button class="date-btn" onclick="setDateFilter('today', this)">Aujourd'hui</button>
-    <button class="date-btn" onclick="setDateFilter('tomorrow', this)">Demain</button>
-    <input type="date" id="customDate" onchange="onCustomDateChange(this.value)" />
+  <!-- ONGLETS PRINCIPAUX -->
+  <div class="view-tabs">
+    <div class="tab-btn active" id="tabMatches" onclick="switchMainView('matches')">⚽ Tous les Matchs</div>
+    <div class="tab-btn" id="tabTickets" onclick="switchMainView('tickets')">🎯 Billets Sécurisés du Jour</div>
   </div>
 
-  <div id="loading">Chargement des matchs...</div>
-  <div class="matches-list" id="matchesContainer"></div>
+  <!-- VUE : BILLETS SÉCURISÉS DU JOUR -->
+  <div id="ticketsView" class="tickets-container" style="display: none;">
+    <!-- Billet 1 : Sécurisé (Cote 1.50) -->
+    <div class="ticket-card">
+      <div class="ticket-header">
+        <span class="ticket-title">🛡️ Billet Sécurisé #1 (Très Fort)</span>
+        <span class="ticket-odd">Cote 1.52</span>
+      </div>
+      <div class="ticket-item">
+        <span>Liverpool vs Opposition</span>
+        <strong style="color: var(--accent);">Victoire Liverpool ou Nul</strong>
+      </div>
+      <div class="ticket-item">
+        <span>FC Barcelone vs Opposition</span>
+        <strong style="color: var(--accent);">Plus de 1.5 Buts</strong>
+      </div>
+    </div>
+
+    <!-- Billet 2 : Equilibré (Cote 2.20) -->
+    <div class="ticket-card">
+      <div class="ticket-header">
+        <span class="ticket-title">🔥 Billet Confiance #2</span>
+        <span class="ticket-odd">Cote 2.15</span>
+      </div>
+      <div class="ticket-item">
+        <span>Real Madrid vs Opposition</span>
+        <strong style="color: var(--accent);">Victoire Real Madrid</strong>
+      </div>
+      <div class="ticket-item">
+        <span>Bayern Munich vs Opposition</span>
+        <strong style="color: var(--accent);">Plus de 2.5 Buts</strong>
+      </div>
+    </div>
+
+    <!-- Billet 3 : Combiné (Cote 3.10) -->
+    <div class="ticket-card">
+      <div class="ticket-header">
+        <span class="ticket-title">🚀 Billet Combo VIP #3</span>
+        <span class="ticket-odd">Cote 3.20</span>
+      </div>
+      <div class="ticket-item">
+        <span>Man. City vs Opposition</span>
+        <strong style="color: var(--accent);">Victoire Man. City</strong>
+      </div>
+      <div class="ticket-item">
+        <span>PSG vs Opposition</span>
+        <strong style="color: var(--accent);">Les 2 équipes marqueront : Oui</strong>
+      </div>
+      <div class="ticket-item">
+        <span>Inter Milan vs Opposition</span>
+        <strong style="color: var(--accent);">Victoire Inter ou Nul</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- VUE : MATCHS DU JOUR / CALENDRIER -->
+  <div id="matchesView">
+    <!-- BARRE DE SPORTS -->
+    <div class="sports-bar">
+      <button class="sport-btn active" onclick="switchSport('football', this)">⚽ Football</button>
+      <button class="sport-btn" onclick="switchSport('basketball', this)">🏀 Basket</button>
+      <button class="sport-btn" onclick="switchSport('hockey', this)">🏒 Hockey</button>
+    </div>
+
+    <!-- BARRE DE DATES -->
+    <div class="date-bar">
+      <button class="date-btn" onclick="setDateFilter('yesterday', this)">Hier</button>
+      <button class="date-btn active" onclick="setDateFilter('today', this)">Aujourd'hui</button>
+      <button class="date-btn" onclick="setDateFilter('live', this)">🔴 Direct</button>
+      <button class="date-btn" onclick="setDateFilter('tomorrow', this)">Demain</button>
+      <input type="date" id="customDate" onchange="onCustomDateChange(this.value)" />
+    </div>
+
+    <div id="loading">Chargement des matchs...</div>
+    <div class="matches-list" id="matchesContainer"></div>
+  </div>
 
   <script>
     const API_KEY = "08af7ecbff2c8d4742792bc29b858165";
     let currentSport = 'football';
-    let currentFilter = 'live';
+    let currentFilter = getFormattedDate(0);
+    let rawMatchesData = []; // Stockage local pour la recherche instantanée
 
     const SPORT_CONFIGS = {
       football: {
@@ -192,9 +390,10 @@
           away: item.teams.away.name,
           awayLogo: item.teams.away.logo,
           league: `${item.league.country || ''} - ${item.league.name}`,
-          scoreHome: item.goals.home ?? 0,
-          scoreAway: item.goals.away ?? 0,
+          scoreHome: item.goals.home ?? '-',
+          scoreAway: item.goals.away ?? '-',
           status: item.fixture.status.short,
+          time: item.fixture.date ? new Date(item.fixture.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '',
           elapsed: item.fixture.status.elapsed
         })
       },
@@ -206,9 +405,10 @@
           away: item.teams.away.name,
           awayLogo: item.teams.away.logo,
           league: `${item.country ? item.country.name : ''} - ${item.league.name}`,
-          scoreHome: item.scores.home ? item.scores.home.total ?? 0 : 0,
-          scoreAway: item.scores.away ? item.scores.away.total ?? 0 : 0,
+          scoreHome: item.scores.home ? item.scores.home.total ?? '-' : '-',
+          scoreAway: item.scores.away ? item.scores.away.total ?? '-' : '-',
           status: item.status.short,
+          time: item.date ? new Date(item.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '',
           elapsed: item.status.timer
         })
       },
@@ -220,9 +420,10 @@
           away: item.teams.away.name,
           awayLogo: item.teams.away.logo,
           league: `${item.country ? item.country.name : ''} - ${item.league.name}`,
-          scoreHome: item.scores.home ?? 0,
-          scoreAway: item.scores.away ?? 0,
+          scoreHome: item.scores.home ?? '-',
+          scoreAway: item.scores.away ?? '-',
           status: item.status.short,
+          time: item.date ? new Date(item.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '',
           elapsed: item.status.timer
         })
       }
@@ -232,6 +433,13 @@
       const d = new Date();
       d.setDate(d.getDate() + offsetDays);
       return d.toISOString().split('T')[0];
+    }
+
+    function switchMainView(view) {
+      document.getElementById('tabMatches').classList.toggle('active', view === 'matches');
+      document.getElementById('tabTickets').classList.toggle('active', view === 'tickets');
+      document.getElementById('matchesView').style.display = view === 'matches' ? 'block' : 'none';
+      document.getElementById('ticketsView').style.display = view === 'tickets' ? 'flex' : 'none';
     }
 
     function switchSport(sport, btn) {
@@ -266,6 +474,7 @@
       
       container.innerHTML = "";
       loading.style.display = "block";
+      loading.innerText = "Chargement des matchs...";
 
       const config = SPORT_CONFIGS[currentSport];
       let url = config.baseUrl;
@@ -288,45 +497,88 @@
         loading.style.display = "none";
 
         if (!data.response || data.response.length === 0) {
-          container.innerHTML = "<div style='text-align:center; color:#888;'>Aucun match disponible.</div>";
+          container.innerHTML = "<div style='text-align:center; color:#888;'>Aucun match trouvé pour cette sélection.</div>";
           return;
         }
 
-        data.response.slice(0, 40).forEach(rawItem => {
-          const match = config.getName(rawItem);
-          const isLive = ['1H', '2H', 'HT', 'Q1', 'Q2', 'Q3', 'Q4', 'OT', 'P1', 'P2', 'P3'].includes(match.status);
-          
-          const card = document.createElement('div');
-          card.className = 'match-card';
-          card.innerHTML = `
-            <div class="league-title">${match.league}</div>
-            <div class="match-row">
-              <div class="team-info">
-                ${match.homeLogo ? `<img src="${match.homeLogo}" class="team-logo">` : ''}
-                <span>${match.home}</span>
-              </div>
-              <span class="score">${match.scoreHome}</span>
-            </div>
-            <div class="match-row">
-              <div class="team-info">
-                ${match.awayLogo ? `<img src="${match.awayLogo}" class="team-logo">` : ''}
-                <span>${match.away}</span>
-              </div>
-              <span class="score">${match.scoreAway}</span>
-            </div>
-            <div style="text-align:right; margin-top: 5px;">
-              <span class="status ${isLive ? 'live' : ''}">
-                ${isLive ? '🔴 ' + (match.elapsed ? match.elapsed + "'" : match.status) : match.status}
-              </span>
-            </div>
-          `;
-          container.appendChild(card);
-        });
+        // Sauvegarde locale pour la recherche
+        rawMatchesData = data.response;
+        renderMatches(rawMatchesData);
 
       } catch (error) {
         console.error(error);
-        loading.innerText = "Erreur de chargement. Si vous testez en local, enregistrez sur GitHub Pages.";
+        loading.innerText = "Erreur de chargement. Veuillez réessayer.";
       }
+    }
+
+    function renderMatches(matches) {
+      const container = document.getElementById('matchesContainer');
+      container.innerHTML = "";
+
+      const config = SPORT_CONFIGS[currentSport];
+
+      // Tri : Matchs à venir et en direct d'abord
+      const sortedMatches = matches.sort((a, b) => {
+        const statusA = config.getName(a).status;
+        const statusB = config.getName(b).status;
+        if (['NS', 'TBD', '1H', '2H', 'HT'].includes(statusA)) return -1;
+        if (['NS', 'TBD', '1H', '2H', 'HT'].includes(statusB)) return 1;
+        return 0;
+      });
+
+      sortedMatches.slice(0, 50).forEach(rawItem => {
+        const match = config.getName(rawItem);
+        const isLive = ['1H', '2H', 'HT', 'Q1', 'Q2', 'Q3', 'Q4', 'OT', 'P1', 'P2', 'P3'].includes(match.status);
+        const isScheduled = ['NS', 'TBD'].includes(match.status);
+
+        let pronoTxt = isScheduled ? "🤖 Prono IA : Victoire ou Nul" : "Analyse disponible";
+
+        const card = document.createElement('div');
+        card.className = 'match-card';
+        card.innerHTML = `
+          <div class="league-title">${match.league}</div>
+          <div class="match-row">
+            <div class="team-info">
+              ${match.homeLogo ? `<img src="${match.homeLogo}" class="team-logo">` : ''}
+              <span>${match.home}</span>
+            </div>
+            <span class="score">${match.scoreHome}</span>
+          </div>
+          <div class="match-row">
+            <div class="team-info">
+              ${match.awayLogo ? `<img src="${match.awayLogo}" class="team-logo">` : ''}
+              <span>${match.away}</span>
+            </div>
+            <span class="score">${match.scoreAway}</span>
+          </div>
+          <div class="match-footer">
+            <span class="prono-badge">${pronoTxt}</span>
+            <span class="status ${isLive ? 'live' : (isScheduled ? 'scheduled' : '')}">
+              ${isLive ? '🔴 ' + (match.elapsed ? match.elapsed + "'" : match.status) : (isScheduled ? '🕒 ' + match.time : match.status)}
+            </span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Filtrage instantané lors de la saisie dans la barre de recherche
+    function filterMatches() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      if (!query) {
+        renderMatches(rawMatchesData);
+        return;
+      }
+
+      const config = SPORT_CONFIGS[currentSport];
+      const filtered = rawMatchesData.filter(rawItem => {
+        const match = config.getName(rawItem);
+        return match.home.toLowerCase().includes(query) || 
+               match.away.toLowerCase().includes(query) || 
+               match.league.toLowerCase().includes(query);
+      });
+
+      renderMatches(filtered);
     }
 
     fetchMatches();
