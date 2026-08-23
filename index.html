@@ -1,285 +1,335 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FootAI Live Pro</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#00E676">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #121212; color: #e0e0e0; padding-bottom: 75px; }
-        
-        .app-header { background-color: #1e1e1e; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #2c2c2c; position: sticky; top: 0; z-index: 1000; }
-        .app-logo { font-size: 16px; font-weight: bold; color: #00E676; }
-        .lang-select { background: #121212; color: #00E676; border: 1px solid #2c2c2c; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: bold; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FootAI Live & Pronos</title>
+  <style>
+    :root {
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --accent: #00e676;
+      --text: #ffffff;
+      --text-muted: #aaaaaa;
+      --border: #2a2a2a;
+    }
 
-        .search-container { padding: 10px 12px; background: #181818; border-bottom: 1px solid #2c2c2c; }
-        .search-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #333; background-color: #121212; color: white; font-size: 13px; outline: none; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text);
+      margin: 0;
+      padding: 15px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
 
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 60px; background-color: #1e1e1e; border-top: 1px solid #2c2c2c; display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 9px; color: #888; cursor: pointer; text-align: center; }
-        .nav-item.active { color: #00E676; font-weight: bold; }
-        .nav-icon { font-size: 18px; margin-bottom: 2px; }
+    h1 {
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 15px;
+      color: var(--accent);
+    }
 
-        .screen { display: none; padding: 12px; }
-        .screen.active { display: block; }
+    .sports-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
 
-        .card { background-color: #1e1e1e; border-radius: 10px; padding: 12px; margin-bottom: 12px; border: 1px solid #2c2c2c; }
-        .badge-won { background-color: rgba(0, 230, 118, 0.2); color: #00E676; padding: 3px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; }
-        .match-item { background-color: #121212; border-radius: 8px; padding: 10px; margin-bottom: 8px; border: 1px solid #222; cursor: pointer; }
-        .league-title { font-size: 11px; color: #00E676; text-transform: uppercase; font-weight: bold; margin-bottom: 4px; }
-        .teams { font-size: 14px; font-weight: bold; color: #fff; }
-        
-        #matchModal, #loginModal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(18, 18, 18, 0.98); z-index: 2000; padding: 15px; overflow-y: auto; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        
-        .locked-overlay { position: relative; }
-        .blur-content { filter: blur(6px); pointer-events: none; }
-        .lock-banner { position: absolute; top: 15%; left: 5%; right: 5%; background: #1e1e1e; border: 1px solid #00E676; border-radius: 12px; padding: 20px; text-align: center; z-index: 100; box-shadow: 0 10px 25px rgba(0,0,0,0.8); }
+    .sport-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
 
-        button { width: 100%; padding: 10px; border-radius: 6px; border: none; background-color: #00E676; color: #121212; font-weight: bold; cursor: pointer; font-size: 13px; margin-top: 8px; }
-        input { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #333; background-color: #121212; color: white; margin-bottom: 10px; font-size: 13px; }
-    </style>
+    .sport-btn.active {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+
+    .date-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--card-bg);
+      padding: 8px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .date-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+
+    .date-btn.active {
+      background: var(--border);
+      color: var(--text);
+      font-weight: bold;
+    }
+
+    input[type="date"] {
+      background: var(--bg-color);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px;
+      border-radius: 8px;
+    }
+
+    .matches-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .match-card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .league-title {
+      font-size: 0.8rem;
+      color: var(--accent);
+      margin-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 4px;
+      font-weight: bold;
+    }
+
+    .match-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 4px 0;
+    }
+
+    .team-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+    }
+
+    .team-logo {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+
+    .score {
+      font-weight: bold;
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    .status {
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: #333;
+      color: #fff;
+    }
+
+    .status.live {
+      background: #e53935;
+      font-weight: bold;
+    }
+
+    #loading {
+      text-align: center;
+      color: var(--text-muted);
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="app-header">
-        <div class="app-logo">FootAI Live</div>
-        <select class="lang-select" id="langSelect" onchange="changerLangue()">
-            <option value="fr">FR</option>
-            <option value="en">EN</option>
-        </select>
-    </div>
+  <h1>⚡ FootAI Live & Pronos</h1>
 
-    <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="Rechercher un match, une equipe ou un championnat..." onkeyup="filtrerRecherche()">
-    </div>
+  <div class="sports-bar">
+    <button class="sport-btn active" onclick="switchSport('football', this)">⚽ Football</button>
+    <button class="sport-btn" onclick="switchSport('basketball', this)">🏀 Basket</button>
+    <button class="sport-btn" onclick="switchSport('hockey', this)">🏒 Hockey</button>
+  </div>
 
-    <!-- 1. PAGE D'ACCUEIL (Billets Gagnés Précédemment) -->
-    <div id="screen-home" class="screen active">
-        <h1 style="font-size: 15px; color:#fff; margin-bottom:10px;" data-tr="home_title">Derniers Tickets Gagnes</h1>
-        <div class="card" style="border-left: 4px solid #00E676;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-                <span style="font-weight:bold; font-size:13px;">Ticket Combine Hier</span>
-                <span class="badge-won">GAGNE</span>
-            </div>
-            <p style="font-size:11px; color:#aaa;">Cote Totale : <strong>2.85</strong></p>
-            <p style="font-size:11px; color:#aaa; margin-top:4px;">* Real Madrid vs Getafe : Victoire Madrid (1.30)<br>* Man City vs Everton : Plus 1.5 Buts (1.22)<br>* PSG vs Monaco : Les 2 equipes marquent (1.50)</p>
-        </div>
-        <div class="card" style="border-left: 4px solid #00E676;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-                <span style="font-weight:bold; font-size:13px;">Ticket Securise (Avant-hier)</span>
-                <span class="badge-won">GAGNE</span>
-            </div>
-            <p style="font-size:11px; color:#aaa;">Cote Totale : <strong>2.10</strong></p>
-            <p style="font-size:11px; color:#aaa; margin-top:4px;">* Arsenal vs Wolves : Arsenal Gagne (1.35)<br>* Inter Milan vs Empoli : Inter ou Nul (1.18)</p>
-        </div>
-    </div>
+  <div class="date-bar">
+    <button class="date-btn" onclick="setDateFilter('yesterday', this)">Hier</button>
+    <button class="date-btn active" onclick="setDateFilter('live', this)">🔴 Direct</button>
+    <button class="date-btn" onclick="setDateFilter('today', this)">Aujourd'hui</button>
+    <button class="date-btn" onclick="setDateFilter('tomorrow', this)">Demain</button>
+    <input type="date" id="customDate" onchange="onCustomDateChange(this.value)" />
+  </div>
 
-    <!-- 2. PAGE CHAMPIONNATS & MATCHS DU JOUR -->
-    <div id="screen-matches" class="screen">
-        <h1 style="font-size: 15px; color:#fff; margin-bottom:10px;" data-tr="matches_title">Championnats & Matchs du Jour</h1>
-        <div id="matchesList">
-            <div class="match-item" onclick="ouvrirMatch('Man City vs Everton', 'Premier League', 'Victoire Man City', '88%', 'V-V-N-V-V', 'V-D-N-D-D', '1er vs 14eme')">
-                <div class="league-title">Premier League</div>
-                <div class="teams">Man City vs Everton</div>
-                <p style="font-size:11px; color:#888; margin-top:4px;">Pronostic : <strong style="color:#00E676;">Victoire Man City (1.30)</strong> - Cliquez pour l'analyse</p>
-            </div>
-            <div class="match-item" onclick="ouvrirMatch('Real Madrid vs Getafe', 'La Liga', 'Plus de 1.5 Buts', '92%', 'V-V-V-N-V', 'D-N-D-V-D', '2eme vs 11eme')">
-                <div class="league-title">La Liga</div>
-                <div class="teams">Real Madrid vs Getafe</div>
-                <p style="font-size:11px; color:#888; margin-top:4px;">Pronostic : <strong style="color:#00E676;">Plus de 1.5 Buts (1.25)</strong> - Cliquez pour l'analyse</p>
-            </div>
-            <div class="match-item" onclick="ouvrirMatch('PSG vs Monaco', 'Ligue 1', 'Les 2 marquent', '81%', 'V-N-V-V-D', 'V-V-D-N-V', '1er vs 3eme')">
-                <div class="league-title">Ligue 1</div>
-                <div class="teams">PSG vs Monaco</div>
-                <p style="font-size:11px; color:#888; margin-top:4px;">Pronostic : <strong style="color:#00E676;">Les 2 equipes marquent (1.50)</strong> - Cliquez pour l'analyse</p>
-            </div>
-        </div>
-    </div>
+  <div id="loading">Chargement des matchs...</div>
+  <div class="matches-list" id="matchesContainer"></div>
 
-    <!-- 3. PAGE 5 TICKETS SECURISES -->
-    <div id="screen-tickets" class="screen">
-        <h1 style="font-size: 15px; color:#fff; margin-bottom:10px;" data-tr="tickets_title">5 Tickets Securises du Jour</h1>
-        <div id="lockWrapper" class="locked-overlay">
-            <div id="lockBanner" class="lock-banner">
-                <h3 style="color: #fff; font-size: 14px; margin-bottom: 6px;">Compte Obligatoire</h3>
-                <p style="font-size: 11px; color: #aaa; margin-bottom: 12px;">Creez un compte gratuit pour debloquer les 5 tickets IA du jour.</p>
-                <button onclick="ouvrirLogin()">Creez un compte</button>
-            </div>
-            <div id="blurTickets" class="blur-content">
-                <div class="card"><h3 style="color:#fff;">Ticket 1 (Cote 2.10)</h3><p style="font-size:11px; color:#888;">Contenu masque...</p></div>
-                <div class="card"><h3 style="color:#fff;">Ticket 2 (Cote 2.45)</h3><p style="font-size:11px; color:#888;">Contenu masque...</p></div>
-                <div class="card"><h3 style="color:#fff;">Ticket 3 (Cote 2.05)</h3><p style="font-size:11px; color:#888;">Contenu masque...</p></div>
-                <div class="card"><h3 style="color:#fff;">Ticket 4 (Cote 2.80)</h3><p style="font-size:11px; color:#888;">Contenu masque...</p></div>
-                <div class="card"><h3 style="color:#fff;">Ticket 5 (Cote 2.30)</h3><p style="font-size:11px; color:#888;">Contenu masque...</p></div>
-            </div>
-        </div>
-    </div>
+  <script>
+    const API_KEY = "08af7ecbff2c8d4742792bc29b858165";
+    let currentSport = 'football';
+    let currentFilter = 'live';
 
-    <!-- 4. PAGE EQUIPES FAVORITES -->
-    <div id="screen-favs" class="screen">
-        <h1 style="font-size: 15px; color:#fff; margin-bottom:10px;" data-tr="favs_title">Mes Equipes Favorites</h1>
-        <div class="card">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-weight:bold; color:#fff;">Real Madrid</span>
-                <span style="font-size:11px; color:#00E676;">Prochain : vs Getafe (Victoire)</span>
-            </div>
-        </div>
-        <div class="card">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-weight:bold; color:#fff;">Manchester City</span>
-                <span style="font-size:11px; color:#00E676;">Prochain : vs Everton (Victoire)</span>
-            </div>
-        </div>
-    </div>
+    const SPORT_CONFIGS = {
+      football: {
+        baseUrl: "https://v3.football.api-sports.io/fixtures",
+        getName: item => ({
+          home: item.teams.home.name,
+          homeLogo: item.teams.home.logo,
+          away: item.teams.away.name,
+          awayLogo: item.teams.away.logo,
+          league: `${item.league.country || ''} - ${item.league.name}`,
+          scoreHome: item.goals.home ?? 0,
+          scoreAway: item.goals.away ?? 0,
+          status: item.fixture.status.short,
+          elapsed: item.fixture.status.elapsed
+        })
+      },
+      basketball: {
+        baseUrl: "https://v1.basketball.api-sports.io/games",
+        getName: item => ({
+          home: item.teams.home.name,
+          homeLogo: item.teams.home.logo,
+          away: item.teams.away.name,
+          awayLogo: item.teams.away.logo,
+          league: `${item.country ? item.country.name : ''} - ${item.league.name}`,
+          scoreHome: item.scores.home ? item.scores.home.total ?? 0 : 0,
+          scoreAway: item.scores.away ? item.scores.away.total ?? 0 : 0,
+          status: item.status.short,
+          elapsed: item.status.timer
+        })
+      },
+      hockey: {
+        baseUrl: "https://v1.hockey.api-sports.io/games",
+        getName: item => ({
+          home: item.teams.home.name,
+          homeLogo: item.teams.home.logo,
+          away: item.teams.away.name,
+          awayLogo: item.teams.away.logo,
+          league: `${item.country ? item.country.name : ''} - ${item.league.name}`,
+          scoreHome: item.scores.home ?? 0,
+          scoreAway: item.scores.away ?? 0,
+          status: item.status.short,
+          elapsed: item.status.timer
+        })
+      }
+    };
 
-    <!-- 5. PAGE COMPTE UTILISATEUR -->
-    <div id="screen-profile" class="screen">
-        <h1 style="font-size: 15px; color:#fff; margin-bottom:10px;" data-tr="profile_title">Mon Compte</h1>
-        <div class="card">
-            <span id="userStatus" style="font-size: 13px;">Vous n'etes pas connecte</span>
-            <button id="authBtn" onclick="ouvrirLogin()">Se Connecter / S'inscrire</button>
-        </div>
-    </div>
+    function getFormattedDate(offsetDays = 0) {
+      const d = new Date();
+      d.setDate(d.getDate() + offsetDays);
+      return d.toISOString().split('T')[0];
+    }
 
-    <!-- MODAL DETAILS DU MATCH -->
-    <div id="matchModal">
-        <div class="modal-header">
-            <h2 id="modalTitle" style="font-size:15px; color:#fff;">Details du Match</h2>
-            <span onclick="fermerMatch()" style="cursor:pointer; color:#888; font-weight:bold;">X</span>
-        </div>
-        <div id="modalContent"></div>
-    </div>
+    function switchSport(sport, btn) {
+      document.querySelectorAll('.sport-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentSport = sport;
+      fetchMatches();
+    }
 
-    <!-- MODAL CONNEXION -->
-    <div id="loginModal">
-        <h1 style="font-size: 18px; text-align: center; margin-bottom: 10px;">Creez un Compte</h1>
-        <p style="font-size: 12px; color: #888; text-align: center; margin-bottom: 15px;">Accedez aux 5 tickets securises gratuitement.</p>
-        <button style="background-color: #fff; color: #000; margin-bottom: 10px;" onclick="connecter('Google User')">Avec Google</button>
-        <input type="text" id="userInput" placeholder="Email ou Numero">
-        <button onclick="connecter(document.getElementById('userInput').value)">Valider</button>
-        <button onclick="fermerLogin()" style="background:transparent; color:#888; border:1px solid #333; margin-top:8px;">Fermer</button>
-    </div>
+    function setDateFilter(filter, btn) {
+      document.querySelectorAll('.date-btn').forEach(b => b.classList.remove('active'));
+      if(btn) btn.classList.add('active');
 
-    <!-- BARRE DE NAVIGATION INFERIEURE -->
-    <div class="bottom-nav">
-        <div class="nav-item active" onclick="naviguerVers('screen-home', this)"><span class="nav-icon">[H]</span><span data-tr="nav_home">Accueil</span></div>
-        <div class="nav-item" onclick="naviguerVers('screen-matches', this)"><span class="nav-icon">[M]</span><span data-tr="nav_matches">Matchs</span></div>
-        <div class="nav-item" onclick="naviguerVers('screen-tickets', this)"><span class="nav-icon">[T]</span><span data-tr="nav_tickets">5 Tickets</span></div>
-        <div class="nav-item" onclick="naviguerVers('screen-favs', this)"><span class="nav-icon">[F]</span><span data-tr="nav_favs">Favoris</span></div>
-        <div class="nav-item" onclick="naviguerVers('screen-profile', this)"><span class="nav-icon">[P]</span><span data-tr="nav_profile">Profil</span></div>
-    </div>
+      if (filter === 'yesterday') currentFilter = getFormattedDate(-1);
+      else if (filter === 'today') currentFilter = getFormattedDate(0);
+      else if (filter === 'tomorrow') currentFilter = getFormattedDate(1);
+      else currentFilter = filter;
 
-    <script>
-        const trads = {
-            fr: {
-                home_title: "Derniers Tickets Gagnes",
-                matches_title: "Championnats & Matchs du Jour",
-                tickets_title: "5 Tickets Securises du Jour",
-                favs_title: "Mes Equipes Favorites",
-                profile_title: "Mon Compte",
-                nav_home: "Accueil", nav_matches: "Matchs", nav_tickets: "5 Tickets", nav_favs: "Favoris", nav_profile: "Profil"
-            },
-            en: {
-                home_title: "Last Winning Tickets",
-                matches_title: "Leagues & Today's Matches",
-                tickets_title: "5 Daily Safe Tickets",
-                favs_title: "Favorite Teams",
-                profile_title: "User Account",
-                nav_home: "Home", nav_matches: "Matches", nav_tickets: "5 Tickets", nav_favs: "Favorites", nav_profile: "Profile"
-            }
-        };
+      fetchMatches();
+    }
 
-        function changerLangue() {
-            const lang = document.getElementById('langSelect').value;
-            document.querySelectorAll('[data-tr]').forEach(el => {
-                const key = el.getAttribute('data-tr');
-                if (trads[lang][key]) el.innerText = trads[lang][key];
-            });
+    function onCustomDateChange(dateValue) {
+      if(!dateValue) return;
+      document.querySelectorAll('.date-btn').forEach(b => b.classList.remove('active'));
+      currentFilter = dateValue;
+      fetchMatches();
+    }
+
+    async function fetchMatches() {
+      const container = document.getElementById('matchesContainer');
+      const loading = document.getElementById('loading');
+      
+      container.innerHTML = "";
+      loading.style.display = "block";
+
+      const config = SPORT_CONFIGS[currentSport];
+      let url = config.baseUrl;
+
+      if (currentFilter === 'live') {
+        url += "?live=all";
+      } else {
+        url += `?date=${currentFilter}`;
+      }
+
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "x-apisports-key": API_KEY
+          }
+        });
+
+        const data = await response.json();
+        loading.style.display = "none";
+
+        if (!data.response || data.response.length === 0) {
+          container.innerHTML = "<div style='text-align:center; color:#888;'>Aucun match disponible.</div>";
+          return;
         }
 
-        function naviguerVers(screenId, el) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            if (el) el.classList.add('active');
-        }
+        data.response.slice(0, 40).forEach(rawItem => {
+          const match = config.getName(rawItem);
+          const isLive = ['1H', '2H', 'HT', 'Q1', 'Q2', 'Q3', 'Q4', 'OT', 'P1', 'P2', 'P3'].includes(match.status);
+          
+          const card = document.createElement('div');
+          card.className = 'match-card';
+          card.innerHTML = `
+            <div class="league-title">${match.league}</div>
+            <div class="match-row">
+              <div class="team-info">
+                ${match.homeLogo ? `<img src="${match.homeLogo}" class="team-logo">` : ''}
+                <span>${match.home}</span>
+              </div>
+              <span class="score">${match.scoreHome}</span>
+            </div>
+            <div class="match-row">
+              <div class="team-info">
+                ${match.awayLogo ? `<img src="${match.awayLogo}" class="team-logo">` : ''}
+                <span>${match.away}</span>
+              </div>
+              <span class="score">${match.scoreAway}</span>
+            </div>
+            <div style="text-align:right; margin-top: 5px;">
+              <span class="status ${isLive ? 'live' : ''}">
+                ${isLive ? '🔴 ' + (match.elapsed ? match.elapsed + "'" : match.status) : match.status}
+              </span>
+            </div>
+          `;
+          container.appendChild(card);
+        });
 
-        function filtrerRecherche() {
-            let filter = document.getElementById('searchInput').value.toLowerCase();
-            let items = document.querySelectorAll('.match-item');
-            items.forEach(item => {
-                let text = item.innerText.toLowerCase();
-                item.style.display = text.includes(filter) ? "block" : "none";
-            });
-        }
+      } catch (error) {
+        console.error(error);
+        loading.innerText = "Erreur de chargement. Si vous testez en local, enregistrez sur GitHub Pages.";
+      }
+    }
 
-        function ouvrirMatch(teams, league, pronostic, proba, formE1, formE2, pos) {
-            document.getElementById('modalTitle').innerText = teams;
-            document.getElementById('modalContent').innerHTML = `
-                <div class="card">
-                    <p style="font-size:11px; color:#888;">${league}</p>
-                    <p style="font-size:13px; margin-top:5px;">Pronostic IA : <strong style="color:#00E676;">${pronostic}</strong></p>
-                    <p style="font-size:12px; color:#aaa; margin-top:3px;">Probabilite de reussite : <strong>${proba}</strong></p>
-                </div>
-                <div class="card">
-                    <h4 style="font-size:12px; color:#fff; margin-bottom:6px;">Forme sur les 5 derniers matchs</h4>
-                    <p style="font-size:11px; color:#ccc;">Equipe Domicile : <strong>${formE1}</strong></p>
-                    <p style="font-size:11px; color:#ccc; margin-top:4px;">Equipe Exterieur : <strong>${formE2}</strong></p>
-                </div>
-                <div class="card">
-                    <h4 style="font-size:12px; color:#fff; margin-bottom:4px;">Classement au Championnat</h4>
-                    <p style="font-size:11px; color:#aaa;">Positions : ${pos}</p>
-                </div>
-            `;
-            document.getElementById('matchModal').style.display = 'block';
-        }
-
-        function fermerMatch() { document.getElementById('matchModal').style.display = 'none'; }
-        function ouvrirLogin() { document.getElementById('loginModal').style.display = 'flex'; }
-        function fermerLogin() { document.getElementById('loginModal').style.display = 'none'; }
-
-        function connecter(user) {
-            if (!user) return alert("Veuillez entrer une information valide.");
-            localStorage.setItem('userConnected', user);
-            fermerLogin();
-            verifierConnexion();
-        }
-
-        function deconnecter() {
-            localStorage.removeItem('userConnected');
-            verifierConnexion();
-        }
-
-        function verifierConnexion() {
-            const user = localStorage.getItem('userConnected');
-            const userStatus = document.getElementById('userStatus');
-            const authBtn = document.getElementById('authBtn');
-            const lockBanner = document.getElementById('lockBanner');
-            const blurTickets = document.getElementById('blurTickets');
-
-            if (user) {
-                userStatus.innerHTML = `Connecte en tant que : <strong style="color:#00E676;">${user}</strong>`;
-                authBtn.innerText = "Se Deconnecter";
-                authBtn.style.backgroundColor = "#ff5252";
-                authBtn.onclick = deconnecter;
-
-                lockBanner.style.display = "none";
-                blurTickets.classList.remove("blur-content");
-            } else {
-                userStatus.innerText = "Vous n'etes pas connecte";
-                authBtn.innerText = "Se Connecter / S'inscrire";
-                authBtn.style.backgroundColor = "#00E676";
-                authBtn.onclick = ouvrirLogin;
-
-                lockBanner.style.display = "block";
-                blurTickets.classList.add("blur-content");
-            }
-        }
-
-        window.onload = verifierConnexion;
-    </script>
+    fetchMatches();
+  </script>
 </body>
 </html>
